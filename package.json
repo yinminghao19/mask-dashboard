@@ -1,0 +1,19 @@
+{
+  "name": "theme-deepblueadmin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "echarts": "^4.7.0",
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "jquery": "^3.5.0",
+    "jsdom": "^16.2.2",
+    "multer": "^1.4.2"
+  }
+}
