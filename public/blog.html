@@ -27,10 +27,14 @@
                 <a class="navbar-brand" href="index.html">Mask Statistics System</a>
             </div>
             <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <div style="position: absolute;top: 6px;left: 40%;color: white;width: 23%;height: 38px;font-size: xx-large;overflow: hidden;" id="yqDiv">
+                    
+                </div>
                 <ul class="nav navbar-nav side-nav">
                     <li><a href="index.html"><i class="fa fa-bullseye"></i> 口罩统计一览</a></li>
                     <li><a href="portfolio.html"><i class="fa fa-tasks"></i> 口罩信息录入</a></li>
                     <li class="active"><a href="blog.html"><i class="fa fa-globe"></i> 当周口罩发放情况</a></li>
+                    <li><a href="yq.html"><i class="fa fa-globe"></i> 疫情通报</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right navbar-user">
                     <li class="dropdown messages-dropdown">
@@ -82,7 +86,8 @@
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             <h3 class="panel-title"><i class="fa fa-id-badge"></i> 各项目一览</h3>
-                            <div>本周领取：<span id="bzlq"></span></div>
+                            <div style="position: absolute;top: 10px;left: 142px;">本周领取：<span id="bzlq"></span></div>
+                            <select id="select" style="width: 200px;color: black;position: absolute;top: 12px;right: 20px;"></select>
                         </div>
                         <div style="width: 97%;height: 21px;position: absolute;z-index: 999;background: white;padding: 5px;"></div>
                         <div style="padding: 20px;position: relative;height: 640px;overflow: auto;">

@@ -1,6 +1,11 @@
 var data = [];
 var time = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + "-" + new Date().getDate();
-getDate(time);
+
+timeList();
+
+$("#select").change(function(){
+    getDate();
+});
 
 $("#tj").click(function(){
     $.ajax({
@@ -8,7 +13,7 @@ $("#tj").click(function(){
         async: true,
         type: 'post',
         dataType: 'json',
-        data: {data: data, time: time},
+        data: {data: data, time: $("#select ").val()},
         success: function(res){
             
         },
@@ -23,15 +28,79 @@ $("#tj").click(function(){
     });
 });
 
-function getDate(time){
+$.ajax({
+    url: 'https://mkapi.eastmoney.com/epidemic/api/getSummaryData',
+    type: 'get',
+    dataType: 'json',
+    success: function(res){
+        var qyd = '<div style="transition: margin-bottom 1s; margin-bottom="0px" id="yqDivSub"></div>';
+        res.data.countryAddConfirmList.forEach((yq)=>{
+            qyd = qyd + '<div>'+ yq.area +' 昨日确诊人数：' + yq.addConfirm + '</div>';
+        });
+        $("#yqDiv").append(qyd);
+        setInterval(function(){
+            if (Number($("#yqDivSub")[0].style.marginBottom.replace("px","")) - 1 === -435) {
+                $("#yqDivSub")[0].style.marginBottom = "40px";
+            } else {
+                $("#yqDivSub")[0].style.marginBottom = (Number($("#yqDivSub")[0].style.marginBottom.replace("px","")) - 1).toString() + 'px';
+            }
+        },100);
+    },
+    error: function(err){
+        console.log(err);
+    },
+    complete: function(XHR, TS){
+        console.log(XHR);
+    }
+});
+
+
+function timeList(){
     $.ajax({
-        url: 'http://localhost:8080/timeDate/' + time,
+        url: 'http://localhost:8080/allTime',
+        async: true,
+        type: 'get',
+        dataType: 'json',
+        success: function(res){
+            console.log(res);
+            var option = "";
+            var value = "";
+            res.forEach((t)=>{
+                option = option + '<option value='+ t +' >' + t + '</option>';
+                value = t;
+            });
+            $("#select").append(option);
+            $("#select").val(value);
+            getDate();
+        },
+        error: function(err){
+            console.log(err);
+        },
+        complete: function(XHR, TS){
+
+        }
+    });
+}
+
+function getDate(){
+    $.ajax({
+        url: 'http://localhost:8080/timeDate/' + $("#select ").val(),
         async: true,
         type: 'get',
         dataType: 'json',
         success: function(res){
             data = res;
-            init();
+            if (data.data && data.data.length > 0) {
+                var sjxs = 0;
+                data.data.forEach((obj)=>{
+                    if (obj.sj) {
+                        sjxs = sjxs + Number(obj.sj);
+                    }
+                    
+                    $("#bzlq").html(sjxs);
+                });
+                init();
+            }
         },
         error: function(err){
             console.log(err);
@@ -43,6 +112,7 @@ function getDate(time){
 }
 
 function init() {
+    $("#rdSetting").empty();
     var td = '';
     data.data.forEach((obj, i)=>{
         td = td + "<tr>";
@@ -119,10 +189,17 @@ function checkNum(td){
 }
 
 function dataSet(td,shtd, bz){
+    var sjxs = 0;
     data.data.forEach((obj)=>{
         if(obj.entity === td.html()){
             obj.sj = shtd;
             obj.bz = bz;
         }
+
+        if (obj.sj) {
+            sjxs =sjxs + Number(obj.sj);
+        }
     });
+
+    $("#bzlq").html(sjxs);
 }

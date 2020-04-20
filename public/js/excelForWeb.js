@@ -16,6 +16,32 @@ $.ajax({
     }
 });
 
+$.ajax({
+    url: 'https://mkapi.eastmoney.com/epidemic/api/getSummaryData',
+    type: 'get',
+    dataType: 'json',
+    success: function(res){
+        var qyd = '<div style="transition: margin-bottom 1s; margin-bottom="0px" id="yqDivSub"></div>';
+        res.data.countryAddConfirmList.forEach((yq)=>{
+            qyd = qyd + '<div>'+ yq.area +' 昨日确诊人数：' + yq.addConfirm + '</div>';
+        });
+        $("#yqDiv").append(qyd);
+        setInterval(function(){
+            if (Number($("#yqDivSub")[0].style.marginBottom.replace("px","")) - 1 === -435) {
+                $("#yqDivSub")[0].style.marginBottom = "40px";
+            } else {
+                $("#yqDivSub")[0].style.marginBottom = (Number($("#yqDivSub")[0].style.marginBottom.replace("px","")) - 1).toString() + 'px';
+            }
+        },100);
+    },
+    error: function(err){
+        console.log(err);
+    },
+    complete: function(XHR, TS){
+        console.log(XHR);
+    }
+});
+
 function init(){
     $("#masterCount").html(data.masterCount);
     $("#numberOfRecipients").html(data.numberOfRecipients);
@@ -68,6 +94,9 @@ function tableSetting(){
         td = td + '<tr>';
         td = td + '<td class="y-td">'+all.entityName+'</td>';
         data.timeList.forEach((time)=>{
+            if (all[time] === undefined) {
+                all[time] = 0;
+            }
             td = td + '<td class="y-td">'+all[time]+'</td>';
             hj = hj + all[time];
         });
